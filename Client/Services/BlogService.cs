@@ -14,8 +14,20 @@ namespace Blazor_Blog_Jean.Client.Services
 
         public async Task<Article> GetBlogPostByUrl(string url)
         {
-            var post = await _http.GetFromJsonAsync<Article>($"api/Blog/{url}");
-            return post;
+            //Problème si le client à une connexion vraiment faible
+            //var post = await _http.GetFromJsonAsync<Article>($"api/Blog/{url}");
+            //return post;
+            var result = await _http.GetAsync($"api/Blog/{url}");
+            if (result.StatusCode != System.Net.HttpStatusCode.OK)
+            {
+                var message = await result.Content.ReadAsStringAsync();
+                Console.WriteLine(message);
+                return new Article { Title = message };
+            }
+            else
+            {
+                return await result.Content.ReadFromJsonAsync<Article>();
+            }
         }
 
         public async Task<List<Article>> GetBlogPosts()
