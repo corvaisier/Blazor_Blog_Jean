@@ -1,6 +1,12 @@
+using Blazor_Blog_Jean.Server.Data;
 using Microsoft.AspNetCore.ResponseCompression;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
+//TEST https://stackoverflow.com/questions/69472240/asp-net-6-identity-sqlite-services-adddbcontext-how
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddDbContext<DataContext>(x => x.UseSqlite(connectionString));
 
 // Add services to the container.
 
@@ -32,5 +38,7 @@ app.UseRouting();
 app.MapRazorPages();
 app.MapControllers();
 app.MapFallbackToFile("index.html");
+
+
 
 app.Run();
