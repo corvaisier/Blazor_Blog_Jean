@@ -1,0 +1,26 @@
+﻿@using Blazor_Blog_Jean.Shared
+@inject Blazor_Blog_Jean.Client.Services.IBlogService BlogService
+
+@foreach (var post in Posts)
+{
+    <div>
+        <div>
+            @post.Title
+        </div>
+        <div>
+            @post.Content
+        </div>
+        <div>
+            <a href="/posts/@post.Url">Lire plus ...</a>
+        </div>
+    </div>
+};
+
+@code {
+    private List<Article> Posts = new List<Article>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Posts = await BlogService.GetBlogPosts();
+    }
+}

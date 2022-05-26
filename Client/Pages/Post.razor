@@ -1,0 +1,28 @@
+﻿@using Blazor_Blog_Jean.Shared
+@inject Blazor_Blog_Jean.Client.Services.IBlogService BlogService
+
+@page "/posts/{url}"
+
+@if(CurrentPost == null)
+{
+    <span>Chargement ...</span>
+}
+else
+{
+    <h3>@CurrentPost.Title</h3>
+    <div>
+    @CurrentPost.Id
+    </div>
+}
+
+@code {
+    private Article CurrentPost;
+
+    [Parameter]
+    public string Url { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        CurrentPost = await BlogService.GetBlogPostByUrl(Url);
+    }
+}
