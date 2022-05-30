@@ -1,10 +1,12 @@
 ﻿@using Blazor_Blog_Jean.Shared
 @page "/create"
-
+@inject Blazor_Blog_Jean.Client.Services.IBlogService BlogService
+@inject NavigationManager NavigationManager
 
 <h3>Nouveau post</h3>
 
 <EditForm Model ="@newBlogPost" OnValidSubmit="CreateNewBlogPost">
+    <DataAnnotationsValidator />
     <div class="form-group">
         <label for="title">Url</label>
         <InputText id="url" @bind-Value="newBlogPost.Url" class="form-control"/>
@@ -15,24 +17,40 @@
     </div>
         <div class="form-group">
         <label for="description">Description</label>
-        <InputText id="title" @bind-Value="newBlogPost.Description" class="form-control"/>
+        <InputText id="description" @bind-Value="newBlogPost.Description" class="form-control"/>
     </div>
         <div class="form-group">
         <label for="content">Contenu</label>
         <InputTextArea id="content" @bind-Value="newBlogPost.Content" class="form-control"/>
+    </div>
+        <div class="form-control-file">
+        <label for="image">Image</label>
+        <InputFile OnChange="OnFileChange" />
     </div>
         <div class="form-group">
         <label for="date">Date de création</label>
         <InputDate id="date" @bind-Value="newBlogPost.DateCreated" class="form-control"/>
     </div>
     <button type="submit" class="btn btn-primary">Créer</button>
+    <ValidationSummary />
 </EditForm>
 
 @code {
     Article newBlogPost = new Article();
 
-    void CreateNewBlogPost()
+    async Task CreateNewBlogPost()
     {
-        Console.WriteLine("Create new blog post");
+        var result = await BlogService.CreateNewBlogPost(newBlogPost);
+        NavigationManager.NavigateTo($"posts/{result.Url}");
+    }
+
+    async Task OnFileChange(InputFileChangeEventArgs e)
+    {
+        var format = "image/png";
+        var resizedImg = await e.File.RequestImageFileAsync(format, 300, 300);
+        var buffer = new byte[resizedImg.Size];
+        await resizedImg.OpenReadStream().ReadAsync(buffer);
+        var imageData = $"data:{format};base64,{Convert.ToBase64String(buffer)}";
+        newBlogPost.Image = imageData;
     }
 }
