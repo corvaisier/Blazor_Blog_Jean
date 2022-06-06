@@ -1,4 +1,5 @@
 ﻿@using Blazor_Blog_Jean.Shared
+@using Markdig
 @inject Blazor_Blog_Jean.Client.Services.IBlogService BlogService
 
 @page "/posts/{url}"
@@ -12,6 +13,9 @@ else
     <h3>@CurrentPost.Title</h3>
     <div>
         <img src="@CurrentPost.Image" />
+    </div>
+    <div>
+        @((MarkupString)Markdown.ToHtml(CurrentPost.Content))
     </div>
 }
 

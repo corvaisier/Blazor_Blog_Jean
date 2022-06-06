@@ -1,4 +1,5 @@
 ﻿@using Blazor_Blog_Jean.Shared
+@using Markdig
 @page "/create"
 @inject Blazor_Blog_Jean.Client.Services.IBlogService BlogService
 @inject NavigationManager NavigationManager
@@ -22,6 +23,10 @@
         <div class="form-group">
         <label for="content">Contenu</label>
         <InputTextArea id="content" @bind-Value="newBlogPost.Content" class="form-control"/>
+    </div>
+        <div class="form-group">
+        <label for="contentPreview">Contenu en pré-visionnage</label>
+        <div id="contentPreview" class="form-control" style="height: 100%;">@((MarkupString)Markdown.ToHtml(newBlogPost.Content))</div>
     </div>
         <div class="form-control-file">
         <label for="image">Image</label>

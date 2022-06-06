@@ -11,8 +11,7 @@ namespace Blazor_Blog_Jean.Shared
         public string Title { get; set; }
         [Required]
         public string Description { get; set; }
-        [Required]
-        public string Content { get; set; }
+        public string Content { get; set; } = String.Empty;
         public string Image { get; set; }
         public DateTime DateCreated { get; set; }
     }
