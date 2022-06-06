@@ -32,5 +32,14 @@ namespace Blazor_Blog_Jean.Server.Controllers
             };
             return Ok(post);
         }
+
+        [HttpPost]
+        public async Task<ActionResult<Article>> CreateNewBlogPost(Article request)
+        {
+            _dataContext.Add(request);
+            await _dataContext.SaveChangesAsync();
+
+            return request;
+        }
     }
 }

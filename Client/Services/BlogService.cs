@@ -12,6 +12,12 @@ namespace Blazor_Blog_Jean.Client.Services
             _http = http;
         }
 
+        public async Task<Article> CreateNewBlogPost(Article request)
+        {
+            var result = await _http.PostAsJsonAsync("api/Blog", request);
+            return await result.Content.ReadFromJsonAsync<Article>();
+        }
+
         public async Task<Article> GetBlogPostByUrl(string url)
         {
             //Problème si le client à une connexion vraiment faible
