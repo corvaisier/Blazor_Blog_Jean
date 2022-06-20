@@ -4,6 +4,8 @@
 @inject Blazor_Blog_Jean.Client.Services.IBlogService BlogService
 @inject NavigationManager NavigationManager
 
+@attribute [Authorize]
+
 <h3>Nouveau post</h3>
 
 <EditForm Model ="@newBlogPost" OnValidSubmit="CreateNewBlogPost">
