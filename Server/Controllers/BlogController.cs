@@ -1,6 +1,5 @@
 ﻿using Blazor_Blog_Jean.Server.Data;
 using Blazor_Blog_Jean.Shared;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Blazor_Blog_Jean.Server.Controllers
