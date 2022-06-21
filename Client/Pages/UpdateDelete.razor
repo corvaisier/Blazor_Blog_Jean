@@ -2,21 +2,33 @@
 @using Markdig
 @using System.ComponentModel.DataAnnotations;
 
-@page "/update"
+@page "/updateDelete"
 @inject Blazor_Blog_Jean.Client.Services.IBlogService BlogService
 @inject NavigationManager NavigationManager
 
 @attribute [Authorize]
 
-<h3>MAJ post</h3>
+<h3>Mettre à jour l'article : </h3>
 
-<EditForm Model ="@url" OnValidSubmit="FindBlogPostByUrl">
+<EditForm Model ="@urlForUpdate" OnValidSubmit="FindBlogPostByUrlForUpdate">
     <DataAnnotationsValidator />
     <div class="form-group">
         <label for="title">Url</label>
-        <InputText id="url" @bind-Value="url.Url" class="form-control"/>
+        <InputText id="url" @bind-Value="urlForUpdate.Url" class="form-control"/>
     </div>
-    <button type="submit" class="btn btn-primary">Créer</button>  
+    <button type="submit" class="btn btn-primary">Mettre à jour</button>  
+    <ValidationSummary />
+</EditForm>
+
+<h3>Supprimer l'article : </h3>
+
+<EditForm Model ="@urlForDelete" OnValidSubmit="FindBlogPostByUrlForDelete">
+    <DataAnnotationsValidator />
+    <div class="form-group">
+        <label for="title">Url</label>
+        <InputText id="url" @bind-Value="urlForDelete.Url" class="form-control"/>
+    </div>
+    <button type="submit" class="btn btn-primary">Supprimer</button>  
     <ValidationSummary />
 </EditForm>
 
@@ -29,12 +41,19 @@
         public string Url { get; set; }
     }
 
-    UrlModel url = new UrlModel();
+    UrlModel urlForUpdate = new UrlModel();
+    UrlModel urlForDelete = new UrlModel();
 
-    async Task FindBlogPostByUrl()
+
+    async Task FindBlogPostByUrlForUpdate()
     {
-        var result = await BlogService.GetBlogPostByUrl(url.Url);
-        NavigationManager.NavigateTo($"posts/{result.Url}");
+        Article result = await BlogService.GetBlogPostByUrl(urlForUpdate.Url);
+        NavigationManager.NavigateTo($"update/{result.Url}");
     }
 
+    async Task FindBlogPostByUrlForDelete()
+    {
+        await BlogService.DeleteBlogPostByUrl(urlForDelete.Url);
+        NavigationManager.NavigateTo($"/");
+    }
 }
