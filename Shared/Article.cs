@@ -5,7 +5,7 @@ namespace Blazor_Blog_Jean.Shared
     public class Article
     {
         public int Id { get; set; }
-        [Required, StringLength(20)]
+        [Required, StringLength(20), RegularExpression(@"^\S*$", ErrorMessage = "No white space allowed")]
         public string Url { get; set; }
         [Required, StringLength(255)]
         public string Title { get; set; }

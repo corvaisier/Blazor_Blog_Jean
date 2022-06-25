@@ -18,6 +18,12 @@ namespace Blazor_Blog_Jean.Client.Services
             return await result.Content.ReadFromJsonAsync<Article>();
         }
 
+        public async Task<Article> UpdateBlogPost(Article request)
+        {
+            var result = await _http.PutAsJsonAsync("api/Blog", request);
+            return await result.Content.ReadFromJsonAsync<Article>();
+        }
+
         public async Task<Article> GetBlogPostByUrl(string url)
         {
             //Problème si le client à une connexion vraiment faible
@@ -39,6 +45,20 @@ namespace Blazor_Blog_Jean.Client.Services
         public async Task<List<Article>> GetBlogPosts()
         {
             return await _http.GetFromJsonAsync<List<Article>>($"api/Blog");
+        }
+
+        public async Task DeleteBlogPostByUrl(string url)
+        {
+            Console.WriteLine($"api/Blog/{url}");
+            var result = await _http.DeleteAsync($"api/Blog/{url}");
+            if (result.StatusCode != System.Net.HttpStatusCode.OK)
+            {
+                var message = await result.Content.ReadAsStringAsync();
+            }
+            else
+            {
+                Console.WriteLine("youpi !! ");
+            }
         }
     }
 }

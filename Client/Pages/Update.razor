@@ -1,0 +1,81 @@
+﻿@using Blazor_Blog_Jean.Shared
+@using Markdig
+@inject Blazor_Blog_Jean.Client.Services.IBlogService BlogService
+@inject NavigationManager NavigationManager
+
+@attribute [Authorize]
+@page "/update/{url}"
+
+@if(CurrentPost == null)
+{
+    <span>Chargement ...</span>
+}
+else
+{
+<h3>Nouveau post</h3>
+
+<EditForm Model ="@CurrentPostToUpdate" OnValidSubmit="UpdateBlogPost">
+    <DataAnnotationsValidator />
+    <div class="form-group">
+        <label for="title">Url</label>
+        <InputText id="url" @bind-Value="CurrentPostToUpdate.Url" class="form-control"/>
+    </div>
+        <div class="form-group">
+        <label for="title">Titre</label>
+        <InputText id="title" @bind-Value="CurrentPostToUpdate.Title" class="form-control"/>
+    </div>
+        <div class="form-group">
+        <label for="description">Description</label>
+        <InputText id="description" @bind-Value="CurrentPostToUpdate.Description" class="form-control"/>
+    </div>
+        <div class="form-group">
+        <label for="content">Contenu</label>
+        <InputTextArea id="content" @bind-Value="CurrentPostToUpdate.Content" class="form-control"/>
+    </div>
+        <div class="form-group">
+        <label for="contentPreview">Contenu en pré-visionnage</label>
+        <div id="contentPreview" class="form-control" style="height: 100%;">@((MarkupString)Markdown.ToHtml(CurrentPostToUpdate.Content))</div>
+    </div>
+        <div class="form-control-file">
+        <label for="image">Image</label>
+        <InputFile OnChange="OnFileChange" />
+    </div>
+        <div class="form-group">
+        <label for="date">Date de création</label>
+        <InputDate id="date" @bind-Value="CurrentPostToUpdate.DateCreated" class="form-control"/>
+    </div>
+    <button type="submit" class="btn btn-primary">Créer</button>
+    <ValidationSummary />
+</EditForm>
+}
+
+
+@code {
+    private Article CurrentPost;
+    private Article CurrentPostToUpdate;
+
+    [Parameter]
+    public string Url { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        CurrentPost = await BlogService.GetBlogPostByUrl(Url);
+        CurrentPostToUpdate = CurrentPost;
+    }
+
+    async Task UpdateBlogPost()
+    {
+        var result = await BlogService.UpdateBlogPost(CurrentPostToUpdate);
+        NavigationManager.NavigateTo("/");
+    }
+
+    async Task OnFileChange(InputFileChangeEventArgs e)
+    {
+        var format = "image/png";
+        var resizedImg = await e.File.RequestImageFileAsync(format, 300, 300);
+        var buffer = new byte[resizedImg.Size];
+        await resizedImg.OpenReadStream().ReadAsync(buffer);
+        var imageData = $"data:{format};base64,{Convert.ToBase64String(buffer)}";
+        CurrentPost.Image = imageData;
+    }
+}

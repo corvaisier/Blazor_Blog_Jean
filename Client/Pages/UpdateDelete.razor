@@ -1,0 +1,59 @@
+﻿@using Blazor_Blog_Jean.Shared
+@using Markdig
+@using System.ComponentModel.DataAnnotations;
+
+@page "/updateDelete"
+@inject Blazor_Blog_Jean.Client.Services.IBlogService BlogService
+@inject NavigationManager NavigationManager
+
+@attribute [Authorize]
+
+<h3>Mettre à jour l'article : </h3>
+
+<EditForm Model ="@urlForUpdate" OnValidSubmit="FindBlogPostByUrlForUpdate">
+    <DataAnnotationsValidator />
+    <div class="form-group">
+        <label for="title">Url</label>
+        <InputText id="url" @bind-Value="urlForUpdate.Url" class="form-control"/>
+    </div>
+    <button type="submit" class="btn btn-primary">Mettre à jour</button>  
+    <ValidationSummary />
+</EditForm>
+
+<h3>Supprimer l'article : </h3>
+
+<EditForm Model ="@urlForDelete" OnValidSubmit="FindBlogPostByUrlForDelete">
+    <DataAnnotationsValidator />
+    <div class="form-group">
+        <label for="title">Url</label>
+        <InputText id="url" @bind-Value="urlForDelete.Url" class="form-control"/>
+    </div>
+    <button type="submit" class="btn btn-primary">Supprimer</button>  
+    <ValidationSummary />
+</EditForm>
+
+@code {
+
+    public class UrlModel
+    {
+        [Required]
+        [StringLength(255, ErrorMessage = "Name is too long.")]
+        public string Url { get; set; }
+    }
+
+    UrlModel urlForUpdate = new UrlModel();
+    UrlModel urlForDelete = new UrlModel();
+
+
+    async Task FindBlogPostByUrlForUpdate()
+    {
+        Article result = await BlogService.GetBlogPostByUrl(urlForUpdate.Url);
+        NavigationManager.NavigateTo($"update/{result.Url}");
+    }
+
+    async Task FindBlogPostByUrlForDelete()
+    {
+        await BlogService.DeleteBlogPostByUrl(urlForDelete.Url);
+        NavigationManager.NavigateTo($"/");
+    }
+}

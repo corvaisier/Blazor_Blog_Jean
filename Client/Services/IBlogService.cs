@@ -7,5 +7,7 @@ namespace Blazor_Blog_Jean.Client.Services
         Task<List<Article>> GetBlogPosts();
         Task<Article> GetBlogPostByUrl(string Url);  
         Task<Article> CreateNewBlogPost(Article request);
+        Task<Article> UpdateBlogPost(Article request);
+        Task DeleteBlogPostByUrl(string Url);
     }
 }
