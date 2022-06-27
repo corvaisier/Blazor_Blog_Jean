@@ -1,0 +1,38 @@
+﻿@using Blazor_Blog_Jean.Shared
+@inject Blazor_Blog_Jean.Client.Services.IArticleService BlogService
+@page "/allArticles"
+
+
+<h1>Bonjour, ceci sera le futur titre</h1>
+<h3>IL Y AURA SANS DOUTE UNE BREVE INTOR</h3>
+<p>pEUT PETRE UNE PEU DE TEXTE</p>
+
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        @foreach (var post in Posts)
+        {
+            <div class="col">
+                <div class="card" style="width: 18rem; ">
+                    <img src="@post.Image" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">@post.Title</h5>
+                        <p class="card-text">@post.Description</p>
+                        <a href="/posts/@post.Url" class="btn btn-primary">Lire plus...</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<h3>Je suppose qu'ici il y aura du blabla</h3>
+<p>blabla !!! </p>
+
+@code {
+    private List<Article> Posts = new List<Article>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Posts = await BlogService.GetBlogPosts();
+    }
+}

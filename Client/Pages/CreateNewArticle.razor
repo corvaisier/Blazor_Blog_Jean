@@ -1,42 +1,42 @@
 ﻿@using Blazor_Blog_Jean.Shared
 @using Markdig
-@page "/create"
-@inject Blazor_Blog_Jean.Client.Services.IBlogService BlogService
+@page "/createNewArticle"
+@inject Blazor_Blog_Jean.Client.Services.IArticleService BlogService
 @inject NavigationManager NavigationManager
 
 @attribute [Authorize]
 
 <h3>Nouveau post</h3>
 
-<EditForm Model ="@newBlogPost" OnValidSubmit="CreateNewBlogPost">
+<EditForm Model="@newBlogPost" OnValidSubmit="CreateNewBlogPost">
     <DataAnnotationsValidator />
     <div class="form-group">
         <label for="title">Url</label>
-        <InputText id="url" @bind-Value="newBlogPost.Url" class="form-control"/>
+        <InputText id="url" @bind-Value="newBlogPost.Url" class="form-control" />
     </div>
-        <div class="form-group">
+    <div class="form-group">
         <label for="title">Titre</label>
-        <InputText id="title" @bind-Value="newBlogPost.Title" class="form-control"/>
+        <InputText id="title" @bind-Value="newBlogPost.Title" class="form-control" />
     </div>
-        <div class="form-group">
+    <div class="form-group">
         <label for="description">Description</label>
-        <InputText id="description" @bind-Value="newBlogPost.Description" class="form-control"/>
+        <InputText id="description" @bind-Value="newBlogPost.Description" class="form-control" />
     </div>
-        <div class="form-group">
+    <div class="form-group">
         <label for="content">Contenu</label>
-        <InputTextArea id="content" @bind-Value="newBlogPost.Content" class="form-control"/>
+        <InputTextArea id="content" @bind-Value="newBlogPost.Content" class="form-control" />
     </div>
-        <div class="form-group">
+    <div class="form-group">
         <label for="contentPreview">Contenu en pré-visionnage</label>
         <div id="contentPreview" class="form-control" style="height: 100%;">@((MarkupString)Markdown.ToHtml(newBlogPost.Content))</div>
     </div>
-        <div class="form-control-file">
+    <div class="form-control-file">
         <label for="image">Image</label>
         <InputFile OnChange="OnFileChange" />
     </div>
-        <div class="form-group">
+    <div class="form-group">
         <label for="date">Date de création</label>
-        <InputDate id="date" @bind-Value="newBlogPost.DateCreated" class="form-control"/>
+        <InputDate id="date" @bind-Value="newBlogPost.DateCreated" class="form-control" />
     </div>
     <button type="submit" class="btn btn-primary">Créer</button>
     <ValidationSummary />

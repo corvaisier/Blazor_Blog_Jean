@@ -50,13 +50,14 @@ namespace Blazor_Blog_Jean.Server.Controllers
             if (post == null)
             {
                 return NotFound("Ce post n'existe pas.");
-            } else
+            }
+            else
             {
                 _dataContext.Remove(post);
                 _dataContext.SaveChanges();
                 Console.WriteLine("controller ok!");
                 return Ok(post);
-            }          
+            }
         }
 
         [HttpPost]
@@ -69,7 +70,8 @@ namespace Blazor_Blog_Jean.Server.Controllers
 
                 return request;
 
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
@@ -78,13 +80,15 @@ namespace Blazor_Blog_Jean.Server.Controllers
         [HttpPut]
         public async Task<ActionResult<Article>> UpdateBlogPost(Article request)
         {
-            try {
+            try
+            {
                 _dataContext.Update(request);
                 await _dataContext.SaveChangesAsync();
 
                 return Ok(request);
 
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
