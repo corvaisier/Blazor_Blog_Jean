@@ -3,11 +3,11 @@ using System.Net.Http.Json;
 
 namespace Blazor_Blog_Jean.Client.Services
 {
-    public class BlogService : IBlogService
+    public class ArticleService : IArticleService
     {
         private readonly HttpClient _http;
 
-        public BlogService(HttpClient http)
+        public ArticleService(HttpClient http)
         {
             _http = http;
         }
@@ -44,7 +44,9 @@ namespace Blazor_Blog_Jean.Client.Services
 
         public async Task<List<Article>> GetBlogPosts()
         {
-            return await _http.GetFromJsonAsync<List<Article>>($"api/Blog");
+            var result = await _http.GetFromJsonAsync<List<Article>>($"api/Blog");
+            result.Reverse();
+            return result;
         }
 
         public async Task DeleteBlogPostByUrl(string url)

@@ -2,7 +2,7 @@
 
 namespace Blazor_Blog_Jean.Client.Services
 {
-    public interface IBlogService
+    public interface IArticleService
     {
         Task<List<Article>> GetBlogPosts();
         Task<Article> GetBlogPostByUrl(string Url);  
