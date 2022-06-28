@@ -33,7 +33,6 @@ namespace Blazor_Blog_Jean.Client.Services
             if (result.StatusCode != System.Net.HttpStatusCode.OK)
             {
                 var message = await result.Content.ReadAsStringAsync();
-                Console.WriteLine(message);
                 return new Article { Title = message };
             }
             else
