@@ -7,10 +7,9 @@ COPY . ./
 RUN dotnet restore
     
 # Copy everything else and build
-# COPY ../engine/examples ./
-# COPY ../Server/Pages/Error.cshtml.cs ./
 RUN dotnet publish -c Release -o out
-    
+COPY ../Server/Blazorblog.db ./out
+
 # Build runtime image
 FROM mcr.microsoft.com/dotnet/aspnet:6.0
 WORKDIR /app
